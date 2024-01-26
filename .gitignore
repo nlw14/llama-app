@@ -2,4 +2,5 @@
 ./front/simple-min/
 
 ./back/venv-llama/
-./back/model/*
+./back/venv-llama/*
+./back/.env
