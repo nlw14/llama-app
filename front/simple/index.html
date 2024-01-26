@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="./style.css" rel="stylesheet" />
+    <title>Llamasticot</title>
+</head>
+<body>
+    <div id='app'>
+        <div id='content'>
+            <h1 class='head-title color-change'>Llamasticot</h1>
+            <img class='head-img border-change' src='./lamasticot.png' alt='Lamasticot'/>
+            <div class='wrapper-chat-response border-change'>
+                <div id='chat-response' class='border-change color-change'>
+                    <!-- chats appears here -->
+                </div>
+            </div>
+            <div id='bottom-chat'>
+                <input type='text' id='user-input'/>
+                <button id='send' class='button'>
+                    Envoyer
+                </button>
+            </div>
+            <div id='loader' style='display: none;'>
+                <div></div>
+                <div></div>
+            </div>
+        </div>
+    </div>
+    <script src="./script.js"></script>
+</body>
+</html>
