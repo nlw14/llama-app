@@ -2,23 +2,36 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS, cross_origin
 from llama_cpp import Llama
+from huggingface_hub import hf_hub_download
+from dotenv import load_dotenv
+import os
 
 # Create a Flask object
 app = Flask("Llama server")
-cors = CORS(app, resources={r"/llama": {"origins": "localhost:80/"}})
+cors = CORS(app, resources={r"/llama": {"origins": "http://localhost"}})
 app.config['CORS_HEADERS'] = 'Content-Type'
 model = None
 
-@app.route('/llama', methods=['POST'])
-@cross_origin(origin='localhost:80/',headers=['Content-Type','Authorization'])
-def generate_response():
+def get_model():
     global model
+
+    load_dotenv()
+    token = os.environ.get("HUB_TOKEN")
+    cached_model = hf_hub_download(repo_id="nlw14/llama", filename="llama-2-7b-chat.Q4_K_M.gguf", token=token)
+    model = Llama(cached_model)
+
+
+@app.route('/llama', methods=['OPTIONS','POST'])
+@cross_origin(origin='http://localhost')
+def generate_response():
+    
     
     try:
         data = request.get_json()
 
         # Check if the required field is present in the JSON data
         if 'user_message' in data :
+
             system_message = "You are a unhelpful assistant. You are a lamasticot, you have no arms and legs."
             user_message = data['user_message']
             max_tokens = 100
@@ -29,14 +42,6 @@ def generate_response():
             <</SYS>>
             {user_message} [/INST]"""
             
-            # Create the model if it was not previously created
-            if model is None:
-                # Put the location of to the GGUF model that you've download here
-                model_path = "./model/llama-2-7b-chat.Q4_K_M.gguf"
-                
-                # Create the model
-                model = Llama(model_path=model_path)
-             
             # Run the model
             output = model(prompt, max_tokens=max_tokens, echo=True)
             
@@ -58,5 +63,4 @@ def generate_response():
         response.content_type = "application/json"
         return response
 
-if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+get_model()
