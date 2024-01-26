@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  server:
+    build: ./back
+    container_name: llama-server-container
+    networks:
+      - app-network
+
+  interface:
+    build: ./front/simple
+    container_name: llama-simple-container
+    depends_on:
+      - server
+    networks:
+      - app-network
+
+  proxy:
+    build: ./proxy
+    container_name: nginx-proxy
+    environment:
+      - BACKEND=http://interface:80
+      - MODSEC_RESP_BODY_MIMETYPE=application/json text/plain text/html text/xml
+      - PROXY=1
+    ports: 
+      - "80:80"
+      - "5000:5000"
+    depends_on:
+      - server
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
