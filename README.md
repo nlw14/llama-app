@@ -16,8 +16,8 @@ Clone the repository :
 ```
 
 ## Step 2
-Create a .env file in back/ like .env.example and provide your Huggingface access token
-what's a .env : https://www.armandphilippot.com/article/dotenv-variables-environnement
+Create a .env file in back/ like .env.example and provide your Huggingface access token.
+What's a .env : https://www.armandphilippot.com/article/dotenv-variables-environnement
 
 ## Step 3
 Build the project 
